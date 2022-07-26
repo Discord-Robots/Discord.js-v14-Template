@@ -1,0 +1,28 @@
+{
+  "name": "discord.js-v14-template",
+  "version": "1.0.0",
+  "description": "Discord.js v14 Template based on Lyxcode's Handler",
+  "main": "index.js",
+  "scripts": {
+    "test": "node ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Discord-Robots/Discord.js-v14-Template.git"
+  },
+  "keywords": [
+    "template"
+  ],
+  "author": "marve1icious#4986",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Discord-Robots/Discord.js-v14-Template/issues"
+  },
+  "homepage": "https://github.com/Discord-Robots/Discord.js-v14-Template#readme",
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "discord.js": "^14.0.3",
+    "dotenv": "^16.0.1",
+    "mongoose": "^6.4.7"
+  }
+}
