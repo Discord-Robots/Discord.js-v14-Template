@@ -10,5 +10,9 @@ module.exports = {
      */
     execute(client) {
         console.log(italic.bold.yellowBright(`Client logged in as ${client.user.tag}.`))
+        client.user.setPresence({
+            activities: [{ name: "/commands", type: 5 }],
+            status: "dnd",
+        });
     }
 }
