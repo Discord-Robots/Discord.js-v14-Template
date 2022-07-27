@@ -1,7 +1,7 @@
 const { italic } = require("chalk");
-client.removeAllListeners();
 
 function loadCommands(client) {
+    client.removeAllListeners();
     const { readdirSync } = require("fs");
     let commandsArray = [];
     let developerArray = [];
