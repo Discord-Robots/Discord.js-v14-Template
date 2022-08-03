@@ -17,7 +17,8 @@ module.exports = {
 
     client.user.setPresence({
       activities: [{ name: "/commands", type: 5 }],
-      status: "dnd",
+      // status: "dnd",
+      clientStatus: "mobile"
     });
     //DATABASE READY
     if (process.env.CONNECT) {
@@ -49,7 +50,7 @@ module.exports = {
       });
     } else
       return console.log(
-        `No connection string in your environment. Please set! Or to remove this message, remove lines 22-53 in \`./Events/client/ready.js\``
+        `No connection string in your environment. Please set! \nIf you don't want to use a database, remove lines 22-53 in \`./Events/client/ready.js\``
       );
   },
 };

@@ -55,7 +55,6 @@ module.exports = {
             const user = options.getUser("user") || interaction.user;
             await user.fetch();
             const mem = guild.members.cache.get(user.id);
-            console.log(user.premium_type)
             axios
                 .get(`https://discord.com/api/users/${user.id}`, {
                     headers: {
@@ -124,27 +123,26 @@ module.exports = {
                             }
                         );
                     const Flags = mem.user.flags.toArray();
-                    const Badges = require('../../Structures/Badges');
                     if (Flags) {
                         const flags = Flags.filter(b => !!emoji[b])
-                        if (user.avatar && user.avatar.startsWith('a_'))
+                        if (user.avatar && user.avatar.startsWith('a_') || banner)
                             flags.push(emoji[12].emoji);
 
                         emoji.forEach((e) => {
                             if (Flags.includes(e.name)) flags.push(e.emoji);
                         });
-                        if (_premium) flags.push(emoji[11].emoji)
-                        console.log(flags)
-                        if (flags) {
-                            userinfo.setDescription(`Badges: ${flags.join(" ")}`);
-                        }
 
-                    } else userinfo.setDescription(`Badges: None`)
+                        if (_premium) flags.push(emoji[11].emoji)
+
+                        if (flags.length) {
+                            userinfo.setDescription(`Badges: ${flags.join(" ")}`);
+                        } else userinfo.setDescription(`Badges: None`)
+                    }
 
                     if (banner) {
                         const extension = banner.startsWith("a_") ? ".gif" : ".png";
                         const url = `https://cdn.discordapp.com/banners/${mem.user.id}/${banner}${extension}?size=1024`;
-                        userinfo.setImage(url).setColor("DARK_BUT_NOT_BLACK");
+                        userinfo.setImage(url).setColor("Fuchsia");
                     } else userinfo.setColor(accent_color);
 
                     if (!mem.presence) {

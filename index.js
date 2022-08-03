@@ -12,6 +12,10 @@ const client = new Client({
   fetchAllMembers: true
 });
 
+if (process.env.webhookURL) {
+  require("./Handlers/AntiCrash")(client);
+}
+
 client.config = require("./Structures/config.json");
 client.commands = new Collection();
 client.utils = new Util(client);
