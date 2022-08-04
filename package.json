@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/Discord-Robots/Discord.js-v14-Template#readme",
   "dependencies": {
+    "@anishshobith/deeptype": "^1.1.0",
     "axios": "^0.27.2",
     "chalk": "^4.1.2",
     "discord-badges": "^0.0.0",
