@@ -17,8 +17,7 @@ module.exports = {
 
     client.user.setPresence({
       activities: [{ name: "/commands", type: 5 }],
-      // status: "dnd",
-      clientStatus: "mobile"
+      status: "dnd",
     });
     //DATABASE READY
     if (process.env.CONNECT) {
