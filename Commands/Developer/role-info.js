@@ -7,6 +7,7 @@ const {
 } = require("discord.js");
 
 module.exports = {
+    developer: true,
     data: new SlashCommandBuilder()
         .setName("role-info")
         .setDescription("Tells you who has the role mentioned/ how many people have it.")

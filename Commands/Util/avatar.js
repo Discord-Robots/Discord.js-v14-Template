@@ -9,7 +9,7 @@ module.exports = {
      * @param {CommandInteraction} interaction 
      * @returns 
      */
-    async execute(interaction) {
+    async execute(interaction, client) {
         const user = interaction.options.getUser('user') || interaction.user
         user.fetch();
         const mem = interaction.guild.members.cache.get(user.id)

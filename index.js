@@ -1,5 +1,5 @@
 require("dotenv/config");
-const { Client, Collection } = require("discord.js");
+const { Client, Collection, GatewayIntentBits } = require("discord.js");
 const Util = require("./Structures/Utils");
 const chalk = require("chalk");
 

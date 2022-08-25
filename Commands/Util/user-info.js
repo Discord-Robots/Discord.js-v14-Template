@@ -1,5 +1,6 @@
 const { EmbedBuilder, SlashCommandBuilder, CommandInteraction, Client } = require("discord.js");
 const axios = require("axios");
+const Badges = require('../../Structures/Badges');
 const emoji = [
     { name: "Staff", emoji: "<:staff:998273007988518993>" },
     {
@@ -14,7 +15,7 @@ const emoji = [
         name: "Hypesquad",
         emoji: "<:HypeSquad:998273002011623534>",
     },
-    { name: "HypeSquadOnlineHouse1", emoji: "<:bravery:998272993346207865>" },
+    { name: "HypeSquadOnlineHouse1", emoji: '<:bravery:998272993346207865>' },//
     {
         name: "HypeSquadOnlineHouse2",
         emoji: "<:brilliance:998272994847768617>",
