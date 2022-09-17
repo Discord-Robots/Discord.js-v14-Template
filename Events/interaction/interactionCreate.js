@@ -1,4 +1,4 @@
-const { CommandInteraction } = require("discord.js");
+const { CommandInteraction, EmbedBuilder } = require("discord.js");
 
 module.exports = {
   name: "interactionCreate",
@@ -12,13 +12,41 @@ module.exports = {
 
     const command = client.commands.get(interaction.commandName);
 
-    if (!command) {
-      return interaction.reply({
-        content: "This command is outdated",
-        ephemeral: true,
-      });
-    }
+    try {
+      if (!command) {
+        return interaction.reply({
+          content: "This command is outdated",
+          ephemeral: true,
+        });
+      }
+      if (command.ownerOnly && client.utils.checkOwner(interaction.user.id)) {
+        return interaction.reply({
+          embeds: [
+            new EmbedBuilder()
+              .setDescription(
+                `\\📛 **Error:** \\📛\n You cannot use that command!`
+              )
+              .setColor("Red"),
+          ],
+          ephemeral: true,
+        });
+      }
 
-    command.execute(interaction, client);
+      const subCommand = interaction.options.getSubcommand(false);
+      if (subCommand) {
+        const subCommandFie = client.subCommands.get(
+          `${interaction.commandName}.${subCommand}`
+        );
+        if (!subCommandFie) {
+          return interaction.reply({
+            content: "This sub command is outdated",
+            ephemeral: true,
+          });
+        }
+        subCommandFie.execute(interaction, client);
+      } else command.execute(interaction, client);
+    } catch (error) {
+      console.log(error);
+    }
   },
 };

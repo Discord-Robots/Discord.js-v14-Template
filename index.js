@@ -1,31 +1,37 @@
 require("dotenv/config");
-const { Client, Collection, GatewayIntentBits } = require("discord.js");
+const { Client, Collection } = require("discord.js");
 const Util = require("./Structures/Utils");
+const { BotToken } = process.env;
+const { loadEvents } = require("./Handlers/Events");
+const { loadCommands } = require("./Handlers/Commands");
+const wait = require("node:timers/promises").setTimeout;
 const chalk = require("chalk");
 
-const { loadEvents, unloadEvents } = require("./Handlers/Events");
-const { loadCommands, unloadCommands } = require("./Handlers/Commands");
-
 const client = new Client({
-  intents: [require("./Structures/config.json").intents],
+  intents: 131071,
   partials: [require("./Structures/config.json").partials],
-  fetchAllMembers: true
 });
-
-if (process.env.webhookURL) {
-  require("./Handlers/AntiCrash")(client);
-}
 
 client.config = require("./Structures/config.json");
 client.commands = new Collection();
+client.subCommands = new Collection();
+client.events = new Collection();
 client.utils = new Util(client);
+client.cooldowns = {
+  commands: new Collection(),
+};
 
-client
-  .login(process.env.token)
-  .then(() => {
-    loadEvents(client, chalk);
-    loadCommands(client, chalk);
-  })
-  .catch((err) => console.log(err));
+(async () => {
+  await client.login(BotToken).then(async () => {
+    console.log(
+      chalk.italic.bold.yellowBright(
+        `${client.user.tag} has looged into Discord. `
+      )
+    );
+    await wait(500);
+    await loadEvents(client);
+    loadCommands(client);
+  });
+})();
 
 module.exports = client;

@@ -1,39 +1,28 @@
-const { readdirSync } = require("fs");
+const chalk = require("chalk");
 
-function loadEvents(client, chalk) {
-    client.removeAllListeners();
-    const folders = readdirSync("./Events");
-    let count = 0;
-    for (const folder of folders) {
-        const files =
-            readdirSync(`./Events/${folder}`)
-                .filter((file) => file.endsWith(".js"));
+async function loadEvents(client) {
+  const { loadFiles } = require("../Functions/fileLoader");
 
-        for (const file of files) {
-            const event = require(`../Events/${folder}/${file}`);
-            count++;
-            if (event.rest) {
-                if (event.once)
-                    client.rest.once(event.name, (...args) =>
-                        event.execute(...args, client, chalk)
-                    );
-                else
-                    client.rest.on(event.name, (...args) =>
-                        event.execute(...args, client, chalk)
-                    );
-            } else {
-                if (event.once)
-                    client.once(event.name, (...args) => event.execute(...args, client, chalk))
-                else client.on(event.name, (...args) => event.execute(...args, client, chalk))
-            }
+  await client.events.clear();
+  const Files = await loadFiles("Events");
+  let count = 0;
+  Files.forEach((file) => {
+    const event = require(file);
+    if (!event.name) return console.error(`Event: ${file} doesn't have a name`);
+    const execute = (...args) => event.execute(...args, client);
 
-            continue;
-        }
+    client.events.set(event.name, execute);
+
+    count++;
+    if (event.rest) {
+      if (event.once) client.rest.once(event.name, execute);
+      else client.rest.on(event.name, execute);
+    } else {
+      if (event.once) client.once(event.name, execute);
+      else client.on(event.name, execute);
     }
-    return console.log(chalk.italic.blue(count + " Events Loaded"));
+  });
+  return console.log(chalk.italic.blue(count + " Events Loaded"));
 }
 
-function unloadEvents(client) {
-    return console.log(`Unloaded Events`);
-}
-module.exports = { loadEvents, unloadEvents };
+module.exports = { loadEvents };

@@ -1,7 +1,6 @@
 const { Client } = require("discord.js");
 const chalk = require("chalk");
 const mongoose = require("mongoose");
-const ms = require("ms");
 
 module.exports = {
   name: "ready",
@@ -10,7 +9,7 @@ module.exports = {
    *
    * @param {Client} client
    */
-  execute(client) {
+  async execute(client) {
     console.log(
       chalk.italic.bold.yellowBright(`Client logged in as ${client.user.tag}. `)
     );
@@ -19,8 +18,9 @@ module.exports = {
       activities: [{ name: "/commands", type: 5 }],
       status: "dnd",
     });
+
     //DATABASE READY
-    if (process.env.CONNECT) {
+    if (process.env.Connect) {
       const dbOptions = {
         useNewUrlParser: true,
         useUnifiedTopology: true,
@@ -29,7 +29,7 @@ module.exports = {
         family: 4,
       };
 
-      mongoose.connect(process.env.CONNECT, dbOptions);
+      mongoose.connect(process.env.Connect, dbOptions);
       mongoose.Promise = global.Promise;
 
       mongoose.connection.on("connected", () => {
@@ -47,9 +47,6 @@ module.exports = {
       mongoose.connection.on("disconnected", () => {
         console.warn(chalk.red.italic("Mongoose connection lost"));
       });
-    } else
-      return console.log(
-        `No connection string in your environment. Please set! \nIf you don't want to use a database, remove lines 22-53 in \`./Events/client/ready.js\``
-      );
+    } else return console.log(`No connection string in your environment.`);
   },
 };

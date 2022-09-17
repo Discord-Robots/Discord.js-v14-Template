@@ -35,6 +35,10 @@ module.exports = class Utils {
     return setup;
   }
 
+  checkOwner(user) {
+    return process.env.BotOwnerID !== user;
+  }
+
   errorEmbed(interaction, message) {
     interaction.reply({
       embeds: [
