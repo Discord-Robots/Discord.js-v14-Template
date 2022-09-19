@@ -7,7 +7,6 @@ module.exports = {
    * @param {CommandInteraction} interaction
    */
   execute(interaction, client) {
-    // Command Handler
     if (!interaction.isChatInputCommand()) return;
 
     const command = client.commands.get(interaction.commandName);
