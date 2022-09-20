@@ -11,7 +11,7 @@ Features:
 
 **Logs Everything to the console when starting**
 
-![Imgur](https://i.imgur.com/cP8ooUI.png)
+![Imgur](https://i.imgur.com/3XM9caK.png)
 
 **Easy to Read**
 
@@ -50,18 +50,14 @@ module.exports = {
 
 Components:
 
-- Example Location of component: "./src/components/(type)/(category)/(command)/(component)"
-- type: button/ select menu/ modal
-- category: should match the command category
-- command: folder is named the same as the command name
+- Example Location of component: "/Components/(type)/(component)"
+- type: Buttons/ SelectMenus/ Modals
 - component: file that matches the custom id that you created
-  - This long path just helps to know which command the component belongs to.
+  -Components can be in any folder/sub folder within their respective folders.
 
 ```js
 module.exports = {
-    data: {
-      id: "custom_id", // Must be lowercase
-    },
+    id: "custom_id", // Must be lowercase
   async execute (interaction, client) => {
     // Code here
   },
