@@ -5,5 +5,7 @@ module.exports = {
   /**
    * @param {GuildMember} member
    */
-  async execute(member) {},
+  async execute(member) {
+    console.log(member.id)
+  },
 };

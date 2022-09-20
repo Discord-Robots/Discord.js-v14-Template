@@ -3,6 +3,10 @@ const {
   ApplicationCommandType,
   EmbedBuilder,
   ContextMenuCommandInteraction,
+  ActionRowBuilder,
+  ComponentType,
+  ButtonBuilder,
+  ButtonStyle,
 } = require("discord.js");
 module.exports = {
   data: new ContextMenuCommandBuilder()
@@ -17,6 +21,17 @@ module.exports = {
     const target = interaction.options.getUser("user") || interaction.user;
     await target.fetch();
 
+    const row = new ActionRowBuilder({
+      type: ComponentType.ActionRow,
+      components: [
+        new ButtonBuilder({
+          type: ComponentType.Button,
+          custom_id: 'test',
+          label: 'Click Me!',
+          style: ButtonStyle.Primary
+        })
+      ]
+    })
     const AvatarEmbed = new EmbedBuilder()
       .setColor("Blurple")
       .setTitle(`${target.tag}'s Avatar`)
@@ -27,7 +42,7 @@ module.exports = {
       });
     return await interaction.editReply({
       embeds: [AvatarEmbed],
-      ephemeral: true,
+      components: [row],
     });
   },
   catch(error) {

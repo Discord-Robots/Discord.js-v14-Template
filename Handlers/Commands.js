@@ -7,7 +7,7 @@ async function loadCommands(client) {
   let commandsArray = [];
   let developerArray = [];
 
-  const Files = await client.utils.loadFiles("Commands");
+  const Files = await utils.loadFiles("Commands");
 
   Files.forEach((file) => {
     const command = require(file);
@@ -28,8 +28,11 @@ async function loadCommands(client) {
   });
   client.application.commands.set(commandsArray);
 
-  const developerGuild = client.guilds.cache.get(DevGuild);
-  developerGuild.commands.set(developerArray);
+  if (DevGuild) {
+    const developerGuild = client.guilds.cache.get(DevGuild);
+    developerGuild.commands.set(developerArray);
+  } else console.log(`Please set a Developer Guild Id in .env to enable Developer Guild Only Commands.`)
+
 }
 
 module.exports = { loadCommands };

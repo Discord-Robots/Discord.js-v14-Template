@@ -3,8 +3,8 @@ const Guild = require("./models/guild");
 const { glob } = require("glob");
 const { promisify } = require("util");
 const PG = promisify(glob);
-const chalk = require("chalk");
 const { default: mongoose } = require("mongoose");
+const { Connect } = process.env;
 
 module.exports = class Utils {
   /**
@@ -45,7 +45,12 @@ module.exports = class Utils {
   }
 
   async dbConnect() {
-    if (process.env.Connect) {
+    if (Connect) {
+      const HOSTS_REGEX = /^(?<protocol>[^/]+):\/\/(?:(?<username>[^:@]*)(?::(?<password>[^@]*))?@)?(?<hosts>(?!:)[^/?@]*)(?<rest>.*)/;
+      const match = Connect.match(HOSTS_REGEX);
+      if (!match) {
+        return console.error(chalk.red.bold(`[DATABASE]- Invalid connection string "${Connect}"`));
+      }
       const dbOptions = {
         useNewUrlParser: true,
         useUnifiedTopology: true,
@@ -54,7 +59,13 @@ module.exports = class Utils {
         family: 4,
       };
 
-      mongoose.connect(process.env.Connect, dbOptions);
+      mongoose.connection.on("connecting", () => {
+        console.log(
+          chalk.yellow.italic("Mongoose is connecting...")
+        );
+      });
+
+      mongoose.connect(Connect, dbOptions);
       mongoose.Promise = global.Promise;
 
       mongoose.connection.on("connected", () => {
@@ -72,7 +83,19 @@ module.exports = class Utils {
       mongoose.connection.on("disconnected", () => {
         console.warn(chalk.red.italic("Mongoose connection lost"));
       });
-    } else return console.log(`No connection string in your environment.`);
+
+      const dbModels = this.loadFiles("./Structures/models");
+      let modelCount = 0;
+      (await dbModels).forEach(async (file) => {
+        modelCount++;
+      });
+      if (modelCount > 0) {
+        console.log(
+          chalk.blueBright(`[DATABASE]- Loaded ${modelCount} Model(s)!`)
+        );
+
+      };
+    } else return console.log(`[DATABASE]- No connection string in your environment.`);
   }
 
   async loadFiles(dirName) {
@@ -89,10 +112,10 @@ module.exports = class Utils {
     eventFiles.forEach((file) => {
       const event = require(file);
       if (!event.name)
-        return console.error(`Event: ${file} doesn't have a name`);
+        return console.error(`Event: ${file.split("/").pop()} doesn't have a name`);
       events++;
     });
-    console.log(chalk.italic.blue(events + " Events Loaded"));
+    console.log(chalk.blue(`[HANDLER] - ${events} Event(s) Loaded`));
 
     let devCommands = 0;
     let commands = 0;
@@ -114,14 +137,53 @@ module.exports = class Utils {
       }
     });
     console.log(
-      chalk.italic.greenBright(`${commands} Global Command(s) Loaded`)
+      chalk.blueBright(`[HANDLER] - ${commands} Global Command(s) Loaded`)
     );
 
     console.log(
-      chalk.italic.magentaBright(`${devCommands} Developer Command(s) Loaded`)
+      chalk.blueBright(`[HANDLER] - ${devCommands} Developer Command(s) Loaded`)
     );
 
-    console.log(chalk.italic.redBright(`${subs} Sub Command(s) Loaded`));
+    console.log(chalk.blueBright(`[HANDLER] - ${subs} Sub Command(s) Loaded`));
+
+    //Buttons
+    let but = 0;
+    const Buttons = await this.loadFiles("./Components/Buttons");
+    Buttons.forEach((file) => {
+      const button = require(file);
+      if (!button.id) return console.error(chalk.redBright(`Button: ${button} doesn't have an id.`));
+      but++
+    })
+    if (but > 0) {
+      console.log(chalk.blueBright(`[HANDLER] - ${but} Button(s) Loaded`));
+    }
+
+    //Select Menus
+    let sm = 0;
+    const SelectMenus = await this.loadFiles("./Components/SelectMenus");
+    SelectMenus.forEach((file) => {
+      const selectMenu = require(file);
+      if (!selectMenu.id) return console.error(chalk.redBright(`Select Menu: ${selectMenu} doesn't have an id.`));
+      sm++
+    })
+    if (sm > 0) {
+      console.log(chalk.blueBright(`[HANDLER] - ${sm} Select Menu(s) Loaded`));
+    }
+
+    //Modals
+    let mod = 0;
+    const Modals = await this.loadFiles("./Components/Modals");
+    Modals.forEach((file) => {
+      const modal = require(file);
+      if (!modal.id) return console.error(chalk.redBright(`Modal: ${modal} doesn't have an id.`));
+      mod++
+    })
+    if (mod > 0) {
+      console.log(chalk.blueBright(`[HANDLER] - ${mod} Modal(s) Loaded`));
+    }
+
+    //Database
+    await this.dbConnect();
     return this.logger;
   }
 

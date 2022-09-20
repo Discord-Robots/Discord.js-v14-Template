@@ -8,7 +8,7 @@ module.exports = {
      */
     async execute(interaction, client) {
         if (interaction.isUserContextMenuCommand()) {
-            await interaction.deferReply({ ephemeral: true }).catch((e) => { });
+            await interaction.deferReply({ fetchReply: true }).catch((e) => { });
             const command = client.commands.get(interaction.commandName);
             if (command) command.execute(interaction, client);
         }

@@ -1,7 +1,7 @@
 async function loadEvents(client) {
   await client.events.clear();
 
-  const Files = await client.utils.loadFiles("./Events");
+  const Files = await utils.loadFiles("./Events");
 
   Files.forEach((file) => {
     const event = require(file);
