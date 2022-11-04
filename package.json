@@ -1,7 +1,7 @@
 {
   "name": "discord.js-v14-template",
   "version": "1.0.0",
-  "description": "Discord.js v14 Template based on Lyxcode's Handler",
+  "description": "Discord.js v14 Template based on Lyxcode's Handler (Advanced)",
   "main": "index.js",
   "scripts": {
     "test": "node ."
@@ -13,7 +13,7 @@
   "keywords": [
     "template"
   ],
-  "author": "marve1icious#4986",
+  "author": "marv#8280",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/Discord-Robots/Discord.js-v14-Template/issues"
@@ -23,7 +23,6 @@
     "@anishshobith/deeptype": "^1.1.0",
     "axios": "^0.27.2",
     "chalk": "^4.1.2",
-    "discord-badges": "^0.0.0",
     "discord.js": "^14.3.0",
     "dotenv": "^16.0.1",
     "glob": "^8.0.3",
