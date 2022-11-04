@@ -1,13 +1,8 @@
-const { Client, Guild } = require("discord.js");
-const {} = require("../../Handlers/Commands");
-
 module.exports = {
   name: "guildDelete",
   /**
-   * @param {Client} client
-   * @param {Guild} guild
+   * @param {import("../../Structures/bot")} client
+   * @param {import("discord.js").Guild} guild
    */
-  async execute(client, guild) {
-    // guild.commands.delete().then(() => console.log(`All application commands have been deleted for ${guild.name}`))
-  },
+  async execute(guild, client) {},
 };

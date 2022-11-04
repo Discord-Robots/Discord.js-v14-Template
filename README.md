@@ -85,4 +85,8 @@ Click `Use this template` at the top of this page or fork the repo to your own p
   - Run the bot with `nodemon`.
   - Customize the project to your liking and enjoy!
 
+#
+
+#
+
 Found any bugs or have any suggestion about the template? Create an issue or pull request!

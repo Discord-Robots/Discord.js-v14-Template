@@ -1,31 +1,3 @@
 {
-  "owners": ["1017585248818712597"],
-  "intents": [
-    "DirectMessageReactions",
-    "DirectMessageTyping",
-    "DirectMessages",
-    "GuildBans",
-    "GuildEmojisAndStickers",
-    "GuildIntegrations",
-    "GuildInvites",
-    "GuildMembers",
-    "GuildMessageReactions",
-    "GuildMessageTyping",
-    "GuildMessages",
-    "GuildPresences",
-    "GuildScheduledEvents",
-    "GuildVoiceStates",
-    "GuildWebhooks",
-    "Guilds",
-    "MessageContent"
-  ],
-  "partials": [
-    "Channel",
-    "GuildMember",
-    "GuildScheduledEvent",
-    "Message",
-    "Reaction",
-    "ThreadMember",
-    "User"
-  ]
+  "owners": [""]
 }

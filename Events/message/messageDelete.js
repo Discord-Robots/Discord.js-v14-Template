@@ -1,12 +1,8 @@
-const { Client, Message } = require("discord.js");
-
 module.exports = {
-    name: "messageDelete",
-    /**
-     * @param {Message} message
-     * @param {Client} client 
-     */
-    async execute(client, message) {
-
-    }
-}
+  name: "messageDelete",
+  /**
+   * @param {import("discord.js").Message} message
+   * @param {import("../../Structures/bot")} client
+   */
+  async execute(message, client) {},
+};

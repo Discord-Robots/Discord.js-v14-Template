@@ -1,7 +1,10 @@
+/**
+ * @param {import("../Structures/bot")} client
+ */
 async function loadEvents(client) {
-  await client.events.clear();
+  client.events.clear();
 
-  const Files = await utils.loadFiles("./Events");
+  const Files = await client.utils.loadFiles("./Events");
 
   Files.forEach((file) => {
     const event = require(file);

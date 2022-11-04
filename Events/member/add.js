@@ -1,11 +1,10 @@
-const { GuildMember } = require("discord.js");
-
 module.exports = {
   name: "guildMemberAdd",
   /**
-   * @param {GuildMember} member
+   * @param {import("discord.js").GuildMember} member
+   * @param {import("../../Structures/bot")} client
    */
-  async execute(member) {
-    console.log(member.id)
+  async execute(member, client) {
+    console.log(member.user.username + " joined " + member.guild.name);
   },
 };

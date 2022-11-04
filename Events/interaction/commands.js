@@ -1,12 +1,13 @@
-const { CommandInteraction, EmbedBuilder } = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 
 module.exports = {
   name: "interactionCreate",
   /**
    *
-   * @param {CommandInteraction} interaction
+   * @param {import("discord.js").ChatInputCommandInteraction} interaction
+   * @param {import("../../Structures/bot")} client
    */
-  execute(interaction, client) {
+  async execute(interaction, client) {
     if (!interaction.isChatInputCommand()) return;
 
     const command = client.commands.get(interaction.commandName);
@@ -32,7 +33,7 @@ module.exports = {
       }
 
       const subCommand = interaction.options.getSubcommand(false);
-      if (subCommand) {
+      if (command.subCommand) {
         const subCommandFie = client.subCommands.get(
           `${interaction.commandName}.${subCommand}`
         );

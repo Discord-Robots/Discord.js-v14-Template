@@ -1,13 +1,17 @@
 const { DevGuild } = process.env;
 
+/**
+ *
+ * @param {import("../Structures/bot")} client
+ */
 async function loadCommands(client) {
-  await client.commands.clear();
-  await client.subCommands.clear();
+  client.commands.clear();
+  client.subCommands.clear();
 
   let commandsArray = [];
   let developerArray = [];
 
-  const Files = await utils.loadFiles("Commands");
+  const Files = await client.utils.loadFiles("Commands");
 
   Files.forEach((file) => {
     const command = require(file);
@@ -31,8 +35,10 @@ async function loadCommands(client) {
   if (DevGuild) {
     const developerGuild = client.guilds.cache.get(DevGuild);
     developerGuild.commands.set(developerArray);
-  } else console.log(`Please set a Developer Guild Id in .env to enable Developer Guild Only Commands.`)
-
+  } else
+    console.log(
+      `Please set a Developer Guild Id in .env to enable Developer Guild Only Commands.`
+    );
 }
 
 module.exports = { loadCommands };

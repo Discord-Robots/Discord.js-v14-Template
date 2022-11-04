@@ -5,6 +5,7 @@ const { promisify } = require("util");
 const PG = promisify(glob);
 const { default: mongoose } = require("mongoose");
 const { Connect } = process.env;
+const { get } = require("axios");
 
 module.exports = class Utils {
   /**
@@ -46,10 +47,13 @@ module.exports = class Utils {
 
   async dbConnect() {
     if (Connect) {
-      const HOSTS_REGEX = /^(?<protocol>[^/]+):\/\/(?:(?<username>[^:@]*)(?::(?<password>[^@]*))?@)?(?<hosts>(?!:)[^/?@]*)(?<rest>.*)/;
+      const HOSTS_REGEX =
+        /^(?<protocol>[^/]+):\/\/(?:(?<username>[^:@]*)(?::(?<password>[^@]*))?@)?(?<hosts>(?!:)[^/?@]*)(?<rest>.*)/;
       const match = Connect.match(HOSTS_REGEX);
       if (!match) {
-        return console.error(chalk.red.bold(`[DATABASE]- Invalid connection string "${Connect}"`));
+        return console.error(
+          chalk.red.bold(`[DATABASE]- Invalid connection string "${Connect}"`)
+        );
       }
       const dbOptions = {
         useNewUrlParser: true,
@@ -60,9 +64,7 @@ module.exports = class Utils {
       };
 
       mongoose.connection.on("connecting", () => {
-        console.log(
-          chalk.yellow.italic("Mongoose is connecting...")
-        );
+        console.log(chalk.yellow.italic("Mongoose is connecting..."));
       });
 
       mongoose.connect(Connect, dbOptions);
@@ -93,9 +95,34 @@ module.exports = class Utils {
         console.log(
           chalk.blueBright(`[DATABASE]- Loaded ${modelCount} Model(s)!`)
         );
+      }
+    } else
+      return console.log(
+        `[DATABASE]- No connection string in your environment.`
+      );
+  }
 
-      };
-    } else return console.log(`[DATABASE]- No connection string in your environment.`);
+  async getMeme() {
+    let nonNSFW = null;
+
+    while (nonNSFW === null) {
+      const response = await get("https://reddit.com/r/memes.json");
+      const { data } =
+        response.data.data.children[
+        Math.floor(Math.random() * response.data.data.children.length)
+        ];
+      if (data.over_18 === false) nonNSFW = data;
+    }
+
+    return new EmbedBuilder()
+      .setColor("NotQuiteBlack")
+      .setURL("https://reddit.com" + nonNSFW.permalink)
+      .setTitle(nonNSFW.title)
+      .setDescription(
+        `🤖 **Sub-Reddit**: \`r/${nonNSFW.subreddit}\`\n⬆️ **Upvotes**: \`${nonNSFW.ups}\` - ⬇️ **Downvotes**: \`${nonNSFW.downs}\``
+      )
+      .setFooter({ text: `Meme by ${nonNSFW.author}` })
+      .setImage(nonNSFW.url);
   }
 
   async loadFiles(dirName) {
@@ -112,7 +139,9 @@ module.exports = class Utils {
     eventFiles.forEach((file) => {
       const event = require(file);
       if (!event.name)
-        return console.error(`Event: ${file.split("/").pop()} doesn't have a name`);
+        return console.error(
+          `Event: ${file.split("/").pop()} doesn't have a name`
+        );
       events++;
     });
     console.log(chalk.blue(`[HANDLER] - ${events} Event(s) Loaded`));
@@ -121,7 +150,9 @@ module.exports = class Utils {
     let commands = 0;
     let subs = 0;
 
-    const Files = await this.loadFiles("./Commands");
+    const Files = await (
+      await this.loadFiles("./Commands")
+    );
 
     Files.forEach((file) => {
       const command = require(file);
@@ -151,9 +182,14 @@ module.exports = class Utils {
     const Buttons = await this.loadFiles("./Components/Buttons");
     Buttons.forEach((file) => {
       const button = require(file);
-      if (!button.id) return console.error(chalk.redBright(`Button: ${button} doesn't have an id.`));
-      but++
-    })
+      if (!button.id)
+        return console.error(
+          chalk.redBright(
+            `Button: ${button.split("/").pop()} doesn't have an id.`
+          )
+        );
+      but++;
+    });
     if (but > 0) {
       console.log(chalk.blueBright(`[HANDLER] - ${but} Button(s) Loaded`));
     }
@@ -163,9 +199,12 @@ module.exports = class Utils {
     const SelectMenus = await this.loadFiles("./Components/SelectMenus");
     SelectMenus.forEach((file) => {
       const selectMenu = require(file);
-      if (!selectMenu.id) return console.error(chalk.redBright(`Select Menu: ${selectMenu} doesn't have an id.`));
-      sm++
-    })
+      if (!selectMenu.id)
+        return console.error(
+          chalk.redBright(`Select Menu: ${selectMenu} doesn't have an id.`)
+        );
+      sm++;
+    });
     if (sm > 0) {
       console.log(chalk.blueBright(`[HANDLER] - ${sm} Select Menu(s) Loaded`));
     }
@@ -175,9 +214,12 @@ module.exports = class Utils {
     const Modals = await this.loadFiles("./Components/Modals");
     Modals.forEach((file) => {
       const modal = require(file);
-      if (!modal.id) return console.error(chalk.redBright(`Modal: ${modal} doesn't have an id.`));
-      mod++
-    })
+      if (!modal.id)
+        return console.error(
+          chalk.redBright(`Modal: ${modal} doesn't have an id.`)
+        );
+      mod++;
+    });
     if (mod > 0) {
       console.log(chalk.blueBright(`[HANDLER] - ${mod} Modal(s) Loaded`));
     }

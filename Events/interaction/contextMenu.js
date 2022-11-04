@@ -1,17 +1,19 @@
-const { CommandInteraction, ContextMenuCommandInteraction } = require("discord.js");
-
 module.exports = {
-    name: "interactionCreate",
-    /**
-     *
-     * @param {ContextMenuCommandInteraction} interaction
-     */
-    async execute(interaction, client) {
-        if (interaction.isUserContextMenuCommand()) {
-            await interaction.deferReply({ fetchReply: true }).catch((e) => { });
-            const command = client.commands.get(interaction.commandName);
-            if (command) command.execute(interaction, client);
-        }
-        // command.execute(interaction, client);
+  name: "interactionCreate",
+  /**
+   *
+   * @param {import("discord.js").ContextMenuCommandInteraction} interaction
+   * @param {import("../../Structures/bot")} client
+   */
+  async execute(interaction, client) {
+    if (!interaction.isUserContextMenuCommand()) return;
+    const command = client.commands.get(interaction.commandName);
+    if (!command) return;
+
+    try {
+      command.execute(interaction, client);
+    } catch (error) {
+      console.log(error);
     }
-}
+  },
+};
